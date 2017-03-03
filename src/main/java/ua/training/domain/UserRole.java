@@ -13,6 +13,7 @@ public class UserRole {
     private Long id;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "role", unique = true)
     private Role role ;
     @OneToMany(mappedBy = "userRole", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<User> users;
