@@ -13,6 +13,8 @@ import ua.training.service.LoginService;
 
 import javax.servlet.http.HttpSession;
 
+import static ua.training.controller.validation.Validator.validation;
+
 /**
  * Created by dima on 28.02.17.
  */
@@ -30,8 +32,7 @@ public class RegistrationController {
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
     public String registrationHandler(@ModelAttribute("registration") @Validated UserDTO user,
                                             BindingResult bindingResult, HttpSession session){
-        if(bindingResult.getAllErrors().size() != 0) {
-            session.setAttribute("error", bindingResult.getAllErrors().get(0).getDefaultMessage());
+        if(!validation(bindingResult, session)) {
             return "redirect:registration";
         }
         loginService.registrationUser(user);

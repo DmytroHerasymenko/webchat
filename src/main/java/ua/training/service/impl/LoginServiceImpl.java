@@ -1,7 +1,7 @@
 package ua.training.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import ua.training.domain.Role;
 import ua.training.domain.User;
@@ -13,14 +13,15 @@ import ua.training.repository.UserRepository;
 import ua.training.repository.UserRoleRepository;
 import ua.training.service.LoginService;
 
-import javax.servlet.http.HttpSession;
+import javax.annotation.Resource;
 
 /**
  * Created by dima on 28.02.17.
  */
 @Service
-@PropertySource("classpath:messages_en.properties")
 public class LoginServiceImpl implements LoginService {
+    @Resource
+    private Environment environment;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -36,7 +37,7 @@ public class LoginServiceImpl implements LoginService {
         try {
             userRepository.save(user);
         } catch (Exception e) {
-            throw new LoginServiceException("reg.exist");
+            throw new LoginServiceException(environment.getProperty("reg.exist"));
         }
     }
 
@@ -44,7 +45,7 @@ public class LoginServiceImpl implements LoginService {
     public User verifyUserLogin(String login, String password) {
         User user = userRepository.getUserByLogin(login);
         if (!(user != null && user.getPassword().equals(password))) {
-            throw new UserLoginServiceException("reg.incorrect");
+            throw new UserLoginServiceException(environment.getProperty("reg.incorrect"));
         }
         return user;
     }
