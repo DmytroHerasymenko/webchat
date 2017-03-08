@@ -13,6 +13,8 @@ import ua.training.service.LoginService;
 
 import javax.servlet.http.HttpSession;
 
+import static ua.training.controller.validation.Validator.validation;
+
 /**
  * Created by dima on 28.02.17.
  */
@@ -21,21 +23,20 @@ public class RegistrationController {
     @Autowired
     LoginService loginService;
     @RequestMapping(value = "/registration", method = RequestMethod.GET, name = "registrationLink")
-    public ModelAndView registration(){
+    public ModelAndView registration(@ModelAttribute("registration") UserDTO user){
         ModelAndView mv = new ModelAndView();
         mv.setViewName("registration");
         return mv;
     }
 
-    @RequestMapping(value = "/registrationHandler", method = RequestMethod.POST)
+    @RequestMapping(value = "/registration", method = RequestMethod.POST)
     public String registrationHandler(@ModelAttribute("registration") @Validated UserDTO user,
                                             BindingResult bindingResult, HttpSession session){
-        if(bindingResult.getAllErrors().size() != 0) {
-            session.setAttribute("error", bindingResult.getAllErrors().get(0));
+        if(!validation(bindingResult, session)) {
             return "redirect:registration";
         }
         loginService.registrationUser(user);
-        return "redirect:index";
+        return "redirect:/";
     }
 
 }

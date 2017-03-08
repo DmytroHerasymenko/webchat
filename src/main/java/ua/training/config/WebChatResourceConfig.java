@@ -3,6 +3,7 @@ package ua.training.config;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
@@ -13,8 +14,9 @@ import java.util.Locale;
  * Created by dima on 23.02.17.
  */
 @Configuration
+@PropertySource("classpath:messages_en.properties")
 public class WebChatResourceConfig {
-    @Bean
+    @Bean(name = "messageSource")
     public MessageSource getMessageSource(){
         ResourceBundleMessageSource resourceBundleMessageSource = new ResourceBundleMessageSource();
         resourceBundleMessageSource.setBasenames("db", "messages_en");

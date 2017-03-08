@@ -32,7 +32,7 @@ ${requestScope.error}
             <sf:errors path="password" cssClass="error"/>
         </div>
         <div>
-            <button type="submit" name="save"/>
+            <input type="submit" value="save"/>
         </div>
     </fieldset>
 </sf:form>
