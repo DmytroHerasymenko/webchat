@@ -10,6 +10,9 @@ import ua.training.domain.Role;
 import ua.training.domain.User;
 import ua.training.service.LoginService;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 
@@ -29,9 +32,17 @@ public class LoginController {
     }
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public String verifyLogin(@RequestParam("login") String login, @RequestParam("password") String password,
-                              HttpSession session){
+                              HttpSession session, HttpServletRequest request, HttpServletResponse response){
         User user = loginService.verifyUserLogin(login, password);
         session.setAttribute("user", user);
+        Cookie[] cookies = request.getCookies();
+        for(Cookie cookie : cookies){
+            if(cookie.getName().equals("JSESSIONID")){
+                cookie.setHttpOnly(false);
+                response.addCookie(cookie);
+                break;
+            }
+        }
         if(user.getUserRole().getRole() == Role.USER){
             return "redirect:chat";
         }
