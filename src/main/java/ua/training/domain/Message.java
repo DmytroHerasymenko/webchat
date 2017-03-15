@@ -14,7 +14,7 @@ public class Message {
     @Column(name = "body")
     private String body;
     @Temporal(TemporalType.DATE)
-    private Date date;
+    private Date date = new Date();
     @ManyToOne(fetch = FetchType.EAGER)
     private User sender;
     @ManyToOne(fetch = FetchType.EAGER)
