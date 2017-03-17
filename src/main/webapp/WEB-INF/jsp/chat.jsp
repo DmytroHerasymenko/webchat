@@ -19,6 +19,7 @@ hello, ${username}
                 <textarea id="input-messages"></textarea>
                 <input type="text" id="output-messages"/>
                 <input type="button" value="send" onclick="send()"/>
+                <input type="button" value="broadcast" onclick="broadcast()"/>
                 <input type="button" value="logout" onclick="disconnect()"/>
             </form>
         </td>
@@ -36,7 +37,7 @@ hello, ${username}
 <script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
 <script>
-    var socket = new SockJS("${sessionScope.sockurl}");
+    var socket = new SockJS('${sessionScope.sockurl}');
     var flag = null;
 
     var angularApp = angular.module("webchat", []);
@@ -75,7 +76,7 @@ hello, ${username}
             console.log("authorization failed");
         }
         if(typeof jsonMessage.list !== 'undefined'){
-            activeUsers = jsonMessage.list;
+            var activeUsers = jsonMessage.list;
             var scopeAngular = document.getElementById("angular-webchat").scope();
             scopeAngular.$apply(function () {
                 scopeAngular.setItems(activeUsers);
@@ -91,6 +92,43 @@ hello, ${username}
         if(typeof jsonMessage.disconnect !== 'undefined'){
             window.location.href = "/";
         }
+    }
+    function send(){
+        var mess = document.getElementById("output-message").value;
+        var jsonMessage = {};
+        var messArray = mess.split(":");
+        jsonMessage["name"] = messArray[0];
+        jsonMessage["message"] = messArray[1];
+        socket.send(JSON.stringify(jsonMessage));
+    }
+    function disconnect() {
+        var jsonMessage = {};
+        jsonMessage["disconnect"] = "";
+        socket.send(JSON.stringify(jsonMessage));
+    }
+    function sendList() {
+        var jsonMessage = {};
+        jsonMessage["list"] = "";
+        socket.send(JSON.stringify(jsonMessage));
+    }
+    function registrateUser() {
+        alert("ok");
+        var sessionId = getCookie("JSESSIONID");
+        var jsonMessage = {};
+        jsonMessage["sessionId"] = sessionId;
+        socket.send(JSON.stringify(jsonMessage));
+    }
+    function getCookie(name) {
+        var matches = document.cookie.match(new RegExp(
+            "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+        ));
+        return matches ? decodeURIComponent(matches[1]) : undefined;
+    }
+    function broadcast() {
+        var mess = document.getElementById("output-message").value;
+        var jsonMessage = {};
+        jsonMessage["broadcast"] = mess;
+        socket.send(JSON.stringify(jsonMessage));
     }
 </script>
 </body>

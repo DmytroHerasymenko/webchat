@@ -9,7 +9,7 @@ import ua.training.dto.UserDTO;
 import ua.training.listener.CreateHttpSessionListener;
 import ua.training.repository.MessageRepository;
 import ua.training.repository.UserRepository;
-import ua.training.repository.dao.RedisDAO;
+import ua.training.dao.RedisDAO;
 import ua.training.service.WebChatService;
 
 import javax.servlet.http.HttpSession;

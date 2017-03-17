@@ -11,6 +11,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import ua.training.dao.RedisDAO;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
@@ -47,6 +48,8 @@ public class DataBaseConfig {
 
     //    EntityManager Configuration:
     private static final String PROP_ENTITYMANAGER_PACKAGES_TO_SCAN = "db.entitymanager.packages.to.scan";
+
+    public static final String REDIS_CONNECTION_DATABASE = "db.jedisurl";
 
     @Resource
     private Environment environment;
@@ -95,4 +98,9 @@ public class DataBaseConfig {
 
         return dataSource;
     }
+
+    /*@Bean
+    public RedisDAO getRedisDao(){
+        return new RedisDAO();
+    }*/
 }
