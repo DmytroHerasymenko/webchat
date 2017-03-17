@@ -1,5 +1,7 @@
 package ua.training.listener;
 
+import ua.training.domain.User;
+
 import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
@@ -29,5 +31,19 @@ public class CreateHttpSessionListener implements HttpSessionListener {
 
     public static HttpSession getSessionById(String sessionId){
         return sessions.get(sessionId);
+    }
+
+    public static HttpSession getSessionByLogin(String login){
+        for(HttpSession session : sessions.values()){
+            User user = (User) session.getAttribute("user");
+            if(user.getLogin().equals(login)){
+                return session;
+            }
+        }
+        return null;
+    }
+
+    public static void removeSession(String sessionId){
+        sessions.remove(sessionId);
     }
 }

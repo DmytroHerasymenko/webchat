@@ -1,6 +1,8 @@
 package ua.training.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,9 +22,12 @@ import javax.servlet.http.HttpSession;
  * Created by dima on 28.02.17.
  */
 @Controller
+@PropertySource("classpath:messages_en.properties")
 public class LoginController {
     @Autowired
     private LoginService loginService;
+    @Autowired
+    private Environment environment;
 
     @RequestMapping(value = "/login", method = RequestMethod.GET, name = "loginLink")
     public ModelAndView login(){
@@ -44,6 +49,7 @@ public class LoginController {
             }
         }
         if(user.getUserRole().getRole() == Role.USER){
+            session.setAttribute("sockurl", environment.getProperty("reg.sockurl"));
             return "redirect:chat";
         }
         if(user.getUserRole().getRole() == Role.ADMIN){

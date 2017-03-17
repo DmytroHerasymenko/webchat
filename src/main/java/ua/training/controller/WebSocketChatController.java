@@ -3,6 +3,7 @@ package ua.training.controller;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.socket.TextMessage;
@@ -43,8 +44,8 @@ public class WebSocketChatController extends TextWebSocketHandler {
             } else {
                 clients.put(userDTO.getLogin(), session);
                 session.sendMessage(new TextMessage("{'auth':'yes'}"));
-                List<Map.Entry<String, String>> messages = webChatService.getMessagesForUser(userDTO);
-                for(Map.Entry<String, String> item : messages){
+                List<Pair<String, String>> messages = webChatService.getMessagesForUser(userDTO);
+                for(Pair<String, String> item : messages){
                     JsonObject jMessage = new JsonObject();
                     jMessage.addProperty(item.getKey(), item.getValue());
                     session.sendMessage(new TextMessage(jMessage.toString()));

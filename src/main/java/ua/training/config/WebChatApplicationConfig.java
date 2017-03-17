@@ -12,7 +12,7 @@ import ua.training.intersceptor.ErrorInterceptor;
  */
 @EnableWebMvc
 @Configuration
-@ComponentScan({"ua.training.controller", "ua.training.service"})
+@ComponentScan({"ua.training.controller", "ua.training.service", "ua.training.dao"})
 public class WebChatApplicationConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addInterceptors(InterceptorRegistry registry){
