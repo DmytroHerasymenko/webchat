@@ -3,6 +3,7 @@ package ua.training.service.impl;
 import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ua.training.domain.Message;
 import ua.training.domain.User;
 import ua.training.dto.UserDTO;
@@ -40,6 +41,7 @@ public class WebChatServiceImpl implements WebChatService {
     }
 
     @Override
+    @Transactional
     public List<Pair<String, String>> getMessagesForUser(UserDTO userDTO) {
         List<Message> privateMessages = messageRepository.getMessagesByReceiver(userDTO.getLogin());
         List<String> broadcastMessages = redisDAO.getAllBroadcastMessages();
@@ -47,7 +49,8 @@ public class WebChatServiceImpl implements WebChatService {
         for(Message message : privateMessages){
             allMessages.add(new Pair<>(message.getSender().getLogin(), message.getBody()));
         }
-        messageRepository.deleteMessagesByReceiver(userDTO.getLogin());
+        User u = userRepository.getUserByLogin(userDTO.getLogin());
+        messageRepository.deleteMessagesByReceiver(u);
         for(String broadcastMessage : broadcastMessages){
             String[] arrayBroadcast = broadcastMessage.split(":");
             allMessages.add(new Pair<>(arrayBroadcast[0], arrayBroadcast[1]));

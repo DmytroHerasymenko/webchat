@@ -47,7 +47,7 @@ hello, ${username}
             $scope.items = items;
         }
         $scope.changeUser = function (userName) {
-            document.getElementById("output-message").value = userName + ":";
+            document.getElementById("output-messages").value = userName + ":";
         }
     }
     );
@@ -69,7 +69,7 @@ hello, ${username}
     }
     socket.onmessage = function (param) {
         var jsonMessage = JSON.parse(param.data);
-        if(typeof jsonMessage.auth !== 'undefined' && jsonMessage.auth == "yes"){
+        if(typeof jsonMessage.auth !== "undefined" && jsonMessage.auth == "yes"){
             console.log("authorization successful");
         }
         if(typeof jsonMessage.auth !== 'undefined' && jsonMessage.auth == "no"){
@@ -77,7 +77,7 @@ hello, ${username}
         }
         if(typeof jsonMessage.list !== 'undefined'){
             var activeUsers = jsonMessage.list;
-            var scopeAngular = document.getElementById("angular-webchat").scope();
+            var scopeAngular = angular.element(document.getElementById("angular-webchat")).scope();
             scopeAngular.$apply(function () {
                 scopeAngular.setItems(activeUsers);
             }
@@ -94,7 +94,7 @@ hello, ${username}
         }
     }
     function send(){
-        var mess = document.getElementById("output-message").value;
+        var mess = document.getElementById("output-messages").value;
         var jsonMessage = {};
         var messArray = mess.split(":");
         jsonMessage["name"] = messArray[0];
@@ -112,7 +112,6 @@ hello, ${username}
         socket.send(JSON.stringify(jsonMessage));
     }
     function registrateUser() {
-        alert("ok");
         var sessionId = getCookie("JSESSIONID");
         var jsonMessage = {};
         jsonMessage["sessionId"] = sessionId;
@@ -125,7 +124,7 @@ hello, ${username}
         return matches ? decodeURIComponent(matches[1]) : undefined;
     }
     function broadcast() {
-        var mess = document.getElementById("output-message").value;
+        var mess = document.getElementById("output-messages").value;
         var jsonMessage = {};
         jsonMessage["broadcast"] = mess;
         socket.send(JSON.stringify(jsonMessage));
