@@ -15,9 +15,9 @@ import java.util.List;
  */
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Long> {
-    @Query("SELECT m FROM ua.training.domain.Message m WHERE m.receiver.login = :receiver")
+    @Query("SELECT m FROM ua.training.domain.Message m WHERE m.receiver.login= :receiver")
     List<Message> getMessagesByReceiver(@Param("receiver") String receiver);
     @Modifying
-    @Query("DELETE FROM ua.training.domain.Message m WHERE m.receiver.login = :receiver")
-    void deleteMessagesByReceiver(@Param("receiver") String receiver);
+    @Query("DELETE FROM ua.training.domain.Message m WHERE m.receiver= :receiver")
+    void deleteMessagesByReceiver(@Param("receiver") User receiver);
 }
