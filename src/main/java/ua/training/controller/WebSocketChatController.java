@@ -47,7 +47,8 @@ public class WebSocketChatController extends TextWebSocketHandler {
                 List<Pair<String, String>> messages = webChatService.getMessagesForUser(userDTO);
                 for(Pair<String, String> item : messages){
                     JsonObject jMessage = new JsonObject();
-                    jMessage.addProperty(item.getKey(), item.getValue());
+                    jMessage.addProperty("name", item.getKey());
+                    jMessage.addProperty("message", item.getValue());
                     session.sendMessage(new TextMessage(jMessage.toString()));
                 }
                 return;
@@ -62,9 +63,10 @@ public class WebSocketChatController extends TextWebSocketHandler {
         }
         if(clients.values().contains(session) && clientRequest.containsKey("broadcast")){
             String login = getLoginBySession(session);
-            JsonObject broadcastMessage = new JsonObject();
             String mess = clientRequest.get("broadcast");
-            broadcastMessage.addProperty(login, mess);
+            JsonObject broadcastMessage = new JsonObject();
+            broadcastMessage.addProperty("name", login);
+            broadcastMessage.addProperty("message", mess);
             webChatService.saveBroadcastMessage(login, mess);
             for(WebSocketSession clientSession : clients.values()){
                 clientSession.sendMessage(new TextMessage(broadcastMessage.toString()));
@@ -91,7 +93,7 @@ public class WebSocketChatController extends TextWebSocketHandler {
             String login = getLoginBySession(session);
             clients.remove(login);
             webChatService.invalidateHttpSession(login);
-            session.sendMessage(new TextMessage("{'disconnect':'yes'}"));
+            session.sendMessage(new TextMessage("{\"disconnect\":\"yes\"}"));
             return;
         }
     }
