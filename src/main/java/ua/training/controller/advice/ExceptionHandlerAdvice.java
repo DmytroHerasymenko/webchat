@@ -1,7 +1,11 @@
 package ua.training.controller.advice;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import ua.training.dto.ResponseBanDTO;
+import ua.training.exception.BanUserException;
 import ua.training.exception.LoginServiceException;
 import ua.training.exception.UserLoginServiceException;
 
@@ -21,5 +25,16 @@ public class ExceptionHandlerAdvice {
     public String verificationUserExceptionHandler(UserLoginServiceException e, HttpSession session){
         session.setAttribute("error", e.getMessage());
         return "redirect:login";
+    }
+    @ExceptionHandler(BanUserException.class)
+    public ResponseEntity<ResponseBanDTO> banUserExceptionHandler(BanUserException banUserException){
+        ResponseBanDTO responseBanDTO = new ResponseBanDTO();
+        responseBanDTO.setAuth("yes");
+        responseBanDTO.setSuccess("no");
+        return new ResponseEntity<>(responseBanDTO, HttpStatus.OK);
+    }
+    @ExceptionHandler(Exception.class)
+    public void exceptionHandler(Exception e){
+        e.printStackTrace();
     }
 }

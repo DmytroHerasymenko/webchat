@@ -11,6 +11,7 @@ import javax.validation.constraints.Size;
  * Created by dima on 28.02.17.
  */
 public class UserDTO {
+    private Long id;
     @NotNull(message = "field name can not be null")
     //\\w все цифры и буквы. + один и много знаков
     @Pattern(regexp = "[\\w]+", message = "field name can not satisfy the pattern")
@@ -21,6 +22,16 @@ public class UserDTO {
     @NotNull(message = "field password can not be null")
     @Size(min = 2, max = 12, message = "size should be from 2 to 12")
     private String password;
+
+    private boolean isBanned;
+
+    public boolean isBanned() {
+        return isBanned;
+    }
+
+    public void setBanned(boolean banned) {
+        isBanned = banned;
+    }
 
     public String getName() {
         return name;
@@ -44,5 +55,13 @@ public class UserDTO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
