@@ -4,8 +4,6 @@ import org.springframework.stereotype.Service;
 import ua.training.domain.User;
 import ua.training.dto.UserDTO;
 
-import javax.servlet.http.HttpSession;
-
 /**
  * Created by dima on 28.02.17.
  */

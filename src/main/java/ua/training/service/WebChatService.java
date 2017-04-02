@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import ua.training.dto.UserDTO;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by dima on 09.03.17.

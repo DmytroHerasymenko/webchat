@@ -53,6 +53,7 @@ public class LoginController {
             return "redirect:chat";
         }
         if(user.getUserRole().getRole() == Role.ADMIN){
+            session.setAttribute("usersURL", "/users");
             return "redirect:admin";
         }
         return "redirect:registration";
